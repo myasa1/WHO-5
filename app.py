@@ -1,5 +1,3 @@
-
-
 import streamlit as st
 import numpy as np
 from sklearn.linear_model import LogisticRegression
@@ -7,7 +5,7 @@ import openai
 import os
 
 # ---------- 1️⃣ استخدام مفتاح OpenAI من Secrets ----------
-# تأكدي من إضافة مفتاحك في Streamlit Cloud: OPENAI_API_KEY="sk-XXXX"
+# تأكدي من إضافة المفتاح في Streamlit Cloud: OPENAI_API_KEY="sk-XXXX"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # ---------- 2️⃣ نموذج ML صناعي لتنبؤ الخطورة ----------
@@ -62,7 +60,6 @@ if st.button("احصل على تقريري وخطتي AI"):
     
     # ---------- توليد خطة AI ديناميكية ----------
     prompt = f"""
-أنت مستشار نفسي خبير. 
 المستخدم لديه درجات WHO-5 كالتالي: 
 Q1={q1}, Q2={q2}, Q3={q3}, Q4={q4}, Q5={q5}
 عدد ساعات النوم: {sleep}
@@ -79,13 +76,20 @@ Q1={q1}, Q2={q2}, Q3={q3}, Q4={q4}, Q5={q5}
 قسّم كل أسبوع بمسمى الأسبوع وشرح تمارين يومية قصيرة.
 """
 
+    # واجهة OpenAI الحديثة
     response = openai.ChatCompletion.create(
         model="gpt-4",
-        messages=[{"role":"user","content":prompt}],
+        messages=[
+            {"role": "system", "content": "أنت مستشار نفسي خبير."},
+            {"role": "user", "content": prompt}
+        ],
         temperature=0.7
     )
     
-    plan_ai = response['choices'][0]['message']['content']
+    # استخراج النص من النسخة الحديثة
+    plan_ai = response.choices[0].message.content
     
     st.markdown("### 📅 خطتك الشخصية لمدة 6 أسابيع")
     st.markdown(plan_ai)
+
+
