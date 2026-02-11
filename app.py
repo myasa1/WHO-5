@@ -230,10 +230,18 @@ if st.button("احصل على الخطة التحسينية"):
     prediction = model.predict(user_input)[0]
     probabilities = model.predict_proba(user_input)[0]
 
-    st.subheader("📈 احتمالات التصنيف:")
-    st.write(f"منخفض: {probabilities[0]*100:.1f}%")
-    st.write(f"متوسط: {probabilities[1]*100:.1f}%")
-    st.write(f"مرتفع: {probabilities[2]*100:.1f}%")
+   # تحديد التصنيف النهائي المبسط
+if prediction == 2:
+    status = "🔴 خطر"
+elif prediction == 1:
+    status = "🟡 متوسط"
+else:
+    status = "🟢 طبيعي"
+
+st.subheader("📌 تصنيف الحالة:")
+st.markdown(f"## {status}")
+
 
     report = generate_plan(q1, q2, q3, q4, q5, sleep, activity, prediction)
     st.markdown(report)
+
