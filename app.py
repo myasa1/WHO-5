@@ -4,11 +4,13 @@ import streamlit as st
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 import openai
+import os
 
-# ---------- 1️⃣ إعداد OpenAI API ----------
-openai.api_key = "ضع هنا مفتاح OpenAI الخاص بك"
+# ---------- 1️⃣ استخدام مفتاح OpenAI من Secrets ----------
+# تأكدي من إضافة مفتاحك في Streamlit Cloud: OPENAI_API_KEY="sk-XXXX"
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# ---------- 2️⃣ توليد بيانات صناعية وتدريب نموذج ML ----------
+# ---------- 2️⃣ نموذج ML صناعي لتنبؤ الخطورة ----------
 @st.cache_data
 def generate_and_train_model():
     np.random.seed(42)
@@ -77,7 +79,6 @@ Q1={q1}, Q2={q2}, Q3={q3}, Q4={q4}, Q5={q5}
 قسّم كل أسبوع بمسمى الأسبوع وشرح تمارين يومية قصيرة.
 """
 
-    # استدعاء OpenAI API
     response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=[{"role":"user","content":prompt}],
