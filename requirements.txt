@@ -2,6 +2,7 @@ streamlit
 numpy
 pandas
 scikit-learn
-openai==1.2.4
+openai>=1.0.0
+
 
 
